@@ -99,7 +99,7 @@ perform operations it won't yet have the ability to do.
 
 # Disclaimer #
 This code is still under development, and as such, minor revisions may break compatibility with earlier versions of
-the gem/plugin.  Please keep this in mind when using CleanerUpper.
+the library.  Please keep this in mind when using PathJS.
 
 # Copyright and Licensing #
-Copyright (c) 2010 Mike Trpcic (Fluid Media Inc.), released under the MIT license
+Copyright (c) 2010 Mike Trpcic, released under the MIT license.
