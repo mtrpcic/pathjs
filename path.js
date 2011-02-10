@@ -14,58 +14,61 @@ var Path = {
     },
     'match': function (path) {
         var params = {};
-		var route = null;
-		var i = null;
+        var route = null;
+        var i = null;
         for (route in Path.routes) {
-		    if(route !== null && route !== undefined){
+            if (route !== null && route !== undefined) {
                 var compare = path;
-                if(route.search(/:/) > 0){
-                    for(i = 0; i < route.split("/").length; i++){
-                        if((i < compare.split("/").length) && (route.split("/")[i][0] === ":")){
+                if (route.search(/:/) > 0) {
+                    for (i = 0; i < route.split("/").length; i++) {
+                        if ((i < compare.split("/").length) && (route.split("/")[i][0] === ":")) {
                             params[route.split('/')[i].replace(/:/, '')] = compare.split("/")[i];
                             compare = compare.replace(compare.split("/")[i], route.split("/")[i]);
                         }
                     }
                 }
-                if(route === compare){
+
+                if (route === compare) {
                     Path.routes[route].params = params;
                     return Path.routes[route];
                 }
-			}
+            }
         }
+
         return null;
     },
-	'dispatch': function () {
+    'dispatch': function () {
         if (Path.routes.current !== location.hash) {
             Path.routes.previous = Path.routes.current;
             Path.routes.current = location.hash;
             var match = Path.match(location.hash);
-
-            if(match !== null){
+            if (match !== null) {
                 match.run();
             } else {
-                if(Path.routes.rescue !== null){
-				    if(Path.routes[Path.routes.previous].do_exit !== null){
-					    Path.routes[Path.routes.previous].do_exit();
-					}
+                if (Path.routes.rescue !== null) {
+                    if (Path.routes[Path.routes.previous].do_exit !== null) {
+                        Path.routes[Path.routes.previous].do_exit();
+                    }
+
                     Path.routes.rescue();
                 }
             }
         }
     },
     'listen': function () {
-	    if(location.hash === ""){
-		    if(Path.routes.root !== null){
-			    location.hash = Path.routes.root;
-			}
-		} else {
-		    Path.dispatch();
-		}
-		if("onhashchange" in window){
-		    window.onhashchange = Path.dispatch;
-		} else {
-		    setInterval(Path.dispatch, 50);
-		}
+        if (location.hash === "") {
+            if (Path.routes.root !== null) {
+                location.hash = Path.routes.root;
+            }
+        } else {
+            Path.dispatch();
+        }
+
+        if ("onhashchange" in window) {
+            window.onhashchange = Path.dispatch;
+        } else {
+            setInterval(Path.dispatch, 50);
+        }
     },
     'core': {
         'route': function (path) {
@@ -103,11 +106,13 @@ Path.core.route.prototype = {
                 Path.routes[Path.routes.previous].do_exit();
             }
         }
+
         if (Path.routes[this.path].hasOwnProperty("do_enter")) {
-		    if(Path.routes[this.path].do_enter !== null){
+            if (Path.routes[this.path].do_enter !== null) {
                 Path.routes[this.path].do_enter();
-			}
+            }
         }
+
         Path.routes[this.path].action();
     }
 };
