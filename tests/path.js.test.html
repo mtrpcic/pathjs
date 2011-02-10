@@ -1,8 +1,8 @@
+<!DOCTYPE HTML>
 <html>
 	<head>
 		<title>PathJS Test</title>
-		<script type="text/javascript" src="../path.js"></script
-		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.js"></script>
+		<script type="text/javascript" src="../path.js"></script>
 		<script type="text/javascript">
 		var hrefs = [
 		    "#A",
@@ -44,7 +44,7 @@
 			}
 		}
 		
-		$(document).ready(function(){
+		function define_routes(){
 		    Path.map("#A").enter(function(){
 			    update("A[enter]");
 			}).to(function(){
@@ -94,22 +94,16 @@
 			Path.root("#F");
 			Path.listen();
 		    timer = setInterval(run_route, 500);
-	    });
+	    }
 		</script>
 		
 		<style type="text/css">
-		    body {
-			    font-family: arial;
-			}
-		    p {
-			    width: 600px; text-align: justify;
-			}
-			table {
-			    font-family: courier;
-			}
+		    body {font-family: arial;}
+		    p {width: 600px; text-align: justify;}
+		    table {font-family: courier;}
 		</style>
 	</head>
-	<body>
+	<body onload="define_routes();">
 	    <div id="description">
 		    <h2>Test Suite</h2>
 			<p>
