@@ -11,6 +11,7 @@ PathJS is a lightweight, client-side routing library that allows you to create "
 * Compatible with all major browsers (Tested on Firefox 3.6, Firefox 4.0, Chrome 9, Opera 11, IE8)
 * Allows you to define root routes, and rescue methods
 * Independant of all third party libraries, but plays nice with all of them
+
 # Using PathJS #
 
 **Explanation**
