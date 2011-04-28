@@ -101,9 +101,10 @@ Path.core.route.prototype = {
         return this;
     },
     'run': function () {
-        if (Path.routes.hasOwnProperty(Path.routes.previous)) {
-            if (Path.routes[Path.routes.previous].do_exit !== null) {
-                Path.routes[Path.routes.previous].do_exit();
+        if (Path.routes.previous) {
+            var previous = Path.match(Path.routes.previous);
+            if (previous.do_exit !== null) {
+                previous.do_exit();
             }
         }
 
