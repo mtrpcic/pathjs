@@ -12,7 +12,7 @@ var Path = {
     'rescue': function (fn) {
         Path.routes.rescue = fn;
     },
-    'match': function (path) {
+    'match': function (path, parameterize) {
         var params = {};
         var route = null;
         var i = null;
@@ -29,7 +29,9 @@ var Path = {
                 }
 
                 if (route === compare) {
-                    Path.routes[route].params = params;
+                    if (parameterize) {
+                        Path.routes[route].params = params;
+                    }
                     return Path.routes[route];
                 }
             }
@@ -41,7 +43,7 @@ var Path = {
         if (Path.routes.current !== location.hash) {
             Path.routes.previous = Path.routes.current;
             Path.routes.current = location.hash;
-            var match = Path.match(location.hash);
+            var match = Path.match(location.hash, true);
             if (match !== null) {
                 match.run();
             } else {
@@ -102,8 +104,8 @@ Path.core.route.prototype = {
     },
     'run': function () {
         if (Path.routes.previous) {
-            var previous = Path.match(Path.routes.previous);
-            if (previous.do_exit !== null) {
+            var previous = Path.match(Path.routes.previous, false);
+            if (previous && previous.do_exit !== null) {
                 previous.do_exit();
             }
         }
@@ -113,7 +115,6 @@ Path.core.route.prototype = {
                 Path.routes[this.path].do_enter();
             }
         }
-
         Path.routes[this.path].action();
     }
 };
