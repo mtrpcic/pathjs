@@ -76,7 +76,7 @@ var Path = {
         'route': function (path) {
             this.path = path;
             this.action = null;
-            this.do_enter = null;
+            this.do_enter = [];
             this.do_exit = null;
             this.params = {};
             Path.routes[path] = this;
@@ -94,8 +94,12 @@ Path.core.route.prototype = {
         this.action = fn;
         return this;
     },
-    'enter': function (fn) {
-        this.do_enter = fn;
+    'enter': function (fns) {
+        if(fns instanceof Array){
+            this.do_enter = this.do_enter.concat(fns);
+        } else {
+            this.do_enter.push(fns);
+        }
         return this;
     },
     'exit': function (fn) {
@@ -103,6 +107,7 @@ Path.core.route.prototype = {
         return this;
     },
     'run': function () {
+        var halt_execution = false;
         if (Path.routes.previous) {
             var previous = Path.match(Path.routes.previous, false);
             if (previous && previous.do_exit !== null) {
@@ -111,10 +116,18 @@ Path.core.route.prototype = {
         }
 
         if (Path.routes[this.path].hasOwnProperty("do_enter")) {
-            if (Path.routes[this.path].do_enter !== null) {
-                Path.routes[this.path].do_enter();
+            if (Path.routes[this.path].do_enter.length > 0) {
+                for(var i = 0; i < Path.routes[this.path].do_enter.length; i++){
+                    result = Path.routes[this.path].do_enter[i]();
+                    if(result === false){
+                        halt_execution = true;
+                        break;
+                    }
+                }
             }
         }
-        Path.routes[this.path].action();
+        if(!halt_execution){
+            Path.routes[this.path].action();
+        }
     }
 };
