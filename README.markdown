@@ -54,6 +54,7 @@ the `to` method:
 	}).exit(fade_out);
 
 **Before Filters and Execution Halting**
+
 In some cases, you may want to perform multiple actions before an action is taken, and depending on their results, cancel the action altogether.  For this reason, PathJS supports multiple 'enter' actions, which can be assigned individually or as an array:
 
     Path.map("#/my/first/route").enter(function(){
