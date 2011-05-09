@@ -53,6 +53,27 @@ the `to` method:
 	    alert("Method chaining is great!");
 	}).exit(fade_out);
 
+**Before Filters and Execution Halting**
+In some cases, you may want to perform multiple actions before an action is taken, and depending on their results, cancel the action altogether.  For this reason, PathJS supports multiple 'enter' actions, which can be assigned individually or as an array:
+
+    Path.map("#/my/first/route").enter(function(){
+        alert("First one!");
+    }).enter([
+        function(){
+            alert("Second!");
+            return false;
+        },
+        function(){
+            alert("And third!");
+        }
+    ]);
+    
+    Path.map("#/my/first/route").to(function(){
+        alert("Action!")
+    });
+    
+The methods are executed first-in-first-out, and if any of them returns false, the execution chain is immediately halted.  In the example above, the third 'enter' method, as well as the actual action, will never get called, because the second one explicitly returns false.
+    
 **Route Parameters**
 
 What good would a routing system be if it didn't allow you to use parameters?  If you provide a route that contains a `:token`, that token
