@@ -120,6 +120,11 @@ You should *always* wrap your `Path.listen()` statements in some form of "Docume
 to your site with a predefined route.  Without knowing the DOM is completely done loading, that route will be executed, and may try to
 perform operations it won't yet have the ability to do.
 
+# Next Steps #
+* Adding support for optional parameters
+* Adding support for HTML5 push/pop state
+* Optimizations
+
 # Disclaimer #
 This code is still under development, and as such, minor revisions may break compatibility with earlier versions of
 the library.  Please keep this in mind when using PathJS.
