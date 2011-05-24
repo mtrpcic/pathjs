@@ -88,7 +88,7 @@ object:
 The above route will match any of the following `href`s:
 
     #/users/mike
-	#/users/27
+    #/users/27
 	
 **Root Route**
 
