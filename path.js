@@ -49,9 +49,6 @@ var Path = {
             } else {
                 if (Path.routes.rescue !== null) {
                     Path._exit_previous();
-                    /*if (Path.routes[Path.routes.previous].do_exit !== null) {
-                        Path.routes[Path.routes.previous].do_exit();
-                    }*/
 
                     Path.routes.rescue();
                 }
