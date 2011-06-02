@@ -48,9 +48,10 @@ var Path = {
                 match.run();
             } else {
                 if (Path.routes.rescue !== null) {
-                    if (Path.routes[Path.routes.previous].do_exit !== null) {
+                    Path._exit_previous();
+                    /*if (Path.routes[Path.routes.previous].do_exit !== null) {
                         Path.routes[Path.routes.previous].do_exit();
-                    }
+                    }*/
 
                     Path.routes.rescue();
                 }
@@ -71,6 +72,15 @@ var Path = {
         } else {
             setInterval(Path.dispatch, 50);
         }
+    },
+    '_exit_previous': function () {
+        if (Path.routes.previous) {
+            var previous = Path.match(Path.routes.previous, false);
+            if (previous && previous.do_exit !== null) {
+                previous.do_exit();
+            }
+        }
+        
     },
     'core': {
         'route': function (path) {
@@ -108,12 +118,7 @@ Path.core.route.prototype = {
     },
     'run': function () {
         var halt_execution = false;
-        if (Path.routes.previous) {
-            var previous = Path.match(Path.routes.previous, false);
-            if (previous && previous.do_exit !== null) {
-                previous.do_exit();
-            }
-        }
+        Path._exit_previous();
 
         if (Path.routes[this.path].hasOwnProperty("do_enter")) {
             if (Path.routes[this.path].do_enter.length > 0) {
