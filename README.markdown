@@ -130,6 +130,8 @@ To make a pull request, please do the following:
 
 * Mention what specific version of PathJS you were using when you encountered the issue/added the feature.  This can be accessed by doing `Path.version` in a debugger console
 * Provide a [pastie](http://pastie.org/) or [gist](https://gist.github.com/) that demonstrates the bug/feature
+* Make sure you update the test suite with your changes.  **All tests must pass**
+* Make sure to update the minified version of the source
 * Do **not** modify the `Path.version` attribute.  I will modify that manually when merging the request
 
 # Disclaimer #
