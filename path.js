@@ -48,10 +48,10 @@ var Path = {
                 match.run();
             } else {
                 if (Path.routes.rescue !== null) {
-                    if (Path.routes[Path.routes.previous].do_exit !== null) {
-                        Path.routes[Path.routes.previous].do_exit();
+                    var previous_route = Path.match(Path.routes.previous);
+                    if (previous_route != null && previous_route.do_exit !== null) {
+                        previous_route.do_exit();
                     }
-
                     Path.routes.rescue();
                 }
             }
