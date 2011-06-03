@@ -121,9 +121,16 @@ to your site with a predefined route.  Without knowing the DOM is completely don
 perform operations it won't yet have the ability to do.
 
 # Next Steps #
+* Optimizations
 * Adding support for optional parameters
 * Adding support for HTML5 push/pop state
-* Optimizations
+
+# Pull Requests #
+To make a pull request, please do the following:
+
+* Mention what specific version of PathJS you were using when you encountered the issue/added the feature.  This can be accessed by doing `Path.version` in a debugger console
+* Provide a [pastie](http://pastie.org/) or [gist](https://gist.github.com/) that demonstrates the bug/feature
+* Do **not** modify the `Path.version` attribute.  I will modify that manually when merging the request
 
 # Disclaimer #
 This code is still under development, and as such, minor revisions may break compatibility with earlier versions of
