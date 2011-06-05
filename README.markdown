@@ -136,7 +136,6 @@ perform operations it won't yet have the ability to do.
 
 # Next Steps #
 * Optimizations
-* Adding support for optional parameters
 * Adding support for HTML5 push/pop state
 
 # Pull Requests #
