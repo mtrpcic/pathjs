@@ -1,5 +1,5 @@
 var Path = {
-    'version': "0.5",
+    'version': "0.6",
     'map': function (path) {
         if (Path.routes.hasOwnProperty(path)) {
             return Path.routes[path];
@@ -15,26 +15,46 @@ var Path = {
     },
     'match': function (path, parameterize) {
         var params = {};
+	var parse_params = function(str){
+            var results = [], re = /\(([^}]+?)\)/g, text;
+
+            while(text = re.exec(str)) {
+                results.push(text[1]);
+            }
+            return results;
+        };
         var route = null;
         var i = null;
         for (route in Path.routes) {
             if (route !== null && route !== undefined) {
-                var compare = path;
-                if (route.search(/:/) > 0) {
-                    for (i = 0; i < route.split("/").length; i++) {
-                        if ((i < compare.split("/").length) && (route.split("/")[i][0] === ":")) {
-                            params[route.split('/')[i].replace(/:/, '')] = compare.split("/")[i];
-                            compare = compare.replace(compare.split("/")[i], route.split("/")[i]);
+                var optional_parts = parse_params(route);
+                var valid_routes = [];
+                valid_routes.push(route.split("(")[0]);
+                for(var j = 0; j < optional_parts.length; j++){
+                    valid_routes.push(valid_routes[valid_routes.length - 1] + optional_parts[j]);
+                }
+                for(var x = 0; x < valid_routes.length; x++){
+                    var rroute = valid_routes[x];
+                    var compare = path;
+                    if (rroute.search(/:/) > 0) {
+                        for (i = 0; i < rroute.split("/").length; i++) {
+                            if ((i < compare.split("/").length) && (rroute.split("/")[i][0] === ":")) {
+                                params[rroute.split('/')[i].replace(/:/, '')] = compare.split("/")[i];
+                                compare = compare.replace(compare.split("/")[i], rroute.split("/")[i]);
+                            }
                         }
+                    }
+                    if (rroute === compare) {
+                        if (parameterize) {
+                            Path.routes[route].params = params;
+                        }
+                        return Path.routes[route];
                     }
                 }
 
-                if (route === compare) {
-                    if (parameterize) {
-                        Path.routes[route].params = params;
-                    }
-                    return Path.routes[route];
-                }
+
+
+
             }
         }
 

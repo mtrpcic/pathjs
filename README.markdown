@@ -7,6 +7,7 @@ PathJS is a lightweight, client-side routing library that allows you to create "
 * Tested (tests available in the `./tests` directory)
 * Supports the `onhashchange` method
 * Supports paramaterized routes
+* Supports optional route components (dynamic routes)
 * Supports Aspect Oriented Programming
 * Compatible with all major browsers (Tested on Firefox 3.6, Firefox 4.0, Chrome 9, Opera 11, IE8)
 * Allows you to define root routes, and rescue methods
@@ -90,6 +91,19 @@ The above route will match any of the following `href`s:
     #/users/mike
     #/users/27
 	
+** Optional/Dynamic Routes **
+
+You can define a route that has optional components by wrapping the non-mandatory components in parentheses.  Inside your bound method(s), any params that were **not** provided will come back as undefined.
+
+    Path.map("#/users(/:user_id)").to(function(){
+        var user_id = this.params["user_id"] || "Set a default here!";
+    });
+
+The above route will match both of the following:
+
+    #/users    // Your "user_id" parameter will be undefined.
+    #/users/7  // Your "user_id" parameter will be set to "7".
+
 **Root Route**
 
 If a user were to land on your page without a route defined, you can force them to use a root route.  This route will be automatically selected on page load:
