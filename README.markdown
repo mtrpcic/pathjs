@@ -91,7 +91,7 @@ The above route will match any of the following `href`s:
     #/users/mike
     #/users/27
 	
-** Optional/Dynamic Routes **
+**Optional/Dynamic Routes**
 
 You can define a route that has optional components by wrapping the non-mandatory components in parentheses.  Inside your bound method(s), any params that were **not** provided will come back as undefined.
 
