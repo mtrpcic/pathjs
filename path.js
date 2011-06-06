@@ -1,5 +1,5 @@
 var Path = {
-    'version': "0.6.3",
+    'version': "0.6.4",
     'map': function (path) {
         if (Path.routes.defined.hasOwnProperty(path)) {
             return Path.routes.defined[path];
@@ -42,19 +42,23 @@ var Path = {
         return null;
     },
     'dispatch': function () {
-        var previous_route, match;
+        var previous_route, matched_route;
         if (Path.routes.current !== location.hash) {
             Path.routes.previous = Path.routes.current;
             Path.routes.current = location.hash;
-            match = Path.match(location.hash, true);
-            if (match !== null) {
-                match.run();
+            matched_route = Path.match(location.hash, true);
+
+            if (Path.routes.previous) {
+                previous_route = Path.match(Path.routes.previous);
+                if (previous_route !== null && previous_route.do_exit !== null) {
+                    previous_route.do_exit();
+                }
+            }
+
+            if (matched_route !== null) {
+                matched_route.run();
             } else {
                 if (Path.routes.rescue !== null) {
-                    previous_route = Path.match(Path.routes.previous);
-                    if (previous_route !== null && previous_route.do_exit !== null) {
-                        previous_route.do_exit();
-                    }
                     Path.routes.rescue();
                 }
             }
@@ -123,12 +127,6 @@ Path.core.route.prototype = {
     },
     'run': function () {
         var halt_execution = false, i, result, previous;
-        if (Path.routes.previous) {
-            previous = Path.match(Path.routes.previous, false);
-            if (previous && previous.do_exit !== null) {
-                previous.do_exit();
-            }
-        }
 
         if (Path.routes.defined[this.path].hasOwnProperty("do_enter")) {
             if (Path.routes.defined[this.path].do_enter.length > 0) {
