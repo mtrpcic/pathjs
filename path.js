@@ -1,8 +1,8 @@
 var Path = {
-    'version': "0.6",
+    'version': "0.6.3",
     'map': function (path) {
-        if (Path.routes.hasOwnProperty(path)) {
-            return Path.routes[path];
+        if (Path.routes.defined.hasOwnProperty(path)) {
+            return Path.routes.defined[path];
         } else {
             return new Path.core.route(path);
         }
@@ -14,63 +14,45 @@ var Path = {
         Path.routes.rescue = fn;
     },
     'match': function (path, parameterize) {
-        var params = {};
-	var parse_params = function(str){
-            var results = [], re = /\(([^}]+?)\)/g, text;
-
-            while(text = re.exec(str)) {
-                results.push(text[1]);
-            }
-            return results;
-        };
-        var route = null;
-        var i = null;
-        for (route in Path.routes) {
+        var params = {}, route = null, possible_routes, slice, i, j, compare;
+        for (route in Path.routes.defined) {
             if (route !== null && route !== undefined) {
-                var optional_parts = parse_params(route);
-                var valid_routes = [];
-                valid_routes.push(route.split("(")[0]);
-                for(var j = 0; j < optional_parts.length; j++){
-                    valid_routes.push(valid_routes[valid_routes.length - 1] + optional_parts[j]);
-                }
-                for(var x = 0; x < valid_routes.length; x++){
-                    var rroute = valid_routes[x];
-                    var compare = path;
-                    if (rroute.search(/:/) > 0) {
-                        for (i = 0; i < rroute.split("/").length; i++) {
-                            if ((i < compare.split("/").length) && (rroute.split("/")[i][0] === ":")) {
-                                params[rroute.split('/')[i].replace(/:/, '')] = compare.split("/")[i];
-                                compare = compare.replace(compare.split("/")[i], rroute.split("/")[i]);
+                route = Path.routes.defined[route];
+                possible_routes = route.partition();
+                for (j = 0; j < possible_routes.length; j++) {
+                    slice = possible_routes[j];
+                    compare = path;
+                    if (slice.search(/:/) > 0) {
+                        for (i = 0; i < slice.split("/").length; i++) {
+                            if ((i < compare.split("/").length) && (slice.split("/")[i][0] === ":")) {
+                                params[slice.split('/')[i].replace(/:/, '')] = compare.split("/")[i];
+                                compare = compare.replace(compare.split("/")[i], slice.split("/")[i]);
                             }
                         }
                     }
-                    if (rroute === compare) {
+                    if (slice === compare) {
                         if (parameterize) {
-                            Path.routes[route].params = params;
+                            route.params = params;
                         }
-                        return Path.routes[route];
+                        return route;
                     }
                 }
-
-
-
-
             }
         }
-
         return null;
     },
     'dispatch': function () {
+        var previous_route, match;
         if (Path.routes.current !== location.hash) {
             Path.routes.previous = Path.routes.current;
             Path.routes.current = location.hash;
-            var match = Path.match(location.hash, true);
+            match = Path.match(location.hash, true);
             if (match !== null) {
                 match.run();
             } else {
                 if (Path.routes.rescue !== null) {
-                    var previous_route = Path.match(Path.routes.previous);
-                    if (previous_route != null && previous_route.do_exit !== null) {
+                    previous_route = Path.match(Path.routes.previous);
+                    if (previous_route !== null && previous_route.do_exit !== null) {
                         previous_route.do_exit();
                     }
                     Path.routes.rescue();
@@ -100,14 +82,15 @@ var Path = {
             this.do_enter = [];
             this.do_exit = null;
             this.params = {};
-            Path.routes[path] = this;
+            Path.routes.defined[path] = this;
         }
     },
     'routes': {
         'current': null,
         'root': null,
         'rescue': null,
-        'previous': null
+        'previous': null,
+        'defined': {}
     }
 };
 Path.core.route.prototype = {
@@ -116,7 +99,7 @@ Path.core.route.prototype = {
         return this;
     },
     'enter': function (fns) {
-        if(fns instanceof Array){
+        if (fns instanceof Array) {
             this.do_enter = this.do_enter.concat(fns);
         } else {
             this.do_enter.push(fns);
@@ -127,28 +110,39 @@ Path.core.route.prototype = {
         this.do_exit = fn;
         return this;
     },
+    'partition': function () {
+        var parts = [], options = [], re = /\(([^}]+?)\)/g, text, i;
+        while (text = re.exec(this.path)) {
+            parts.push(text[1]);
+        }
+        options.push(this.path.split("(")[0]);
+        for (i = 0; i < parts.length; i++) {
+            options.push(options[options.length - 1] + parts[i]);
+        }
+        return options;
+    },
     'run': function () {
-        var halt_execution = false;
+        var halt_execution = false, i, result, previous;
         if (Path.routes.previous) {
-            var previous = Path.match(Path.routes.previous, false);
+            previous = Path.match(Path.routes.previous, false);
             if (previous && previous.do_exit !== null) {
                 previous.do_exit();
             }
         }
 
-        if (Path.routes[this.path].hasOwnProperty("do_enter")) {
-            if (Path.routes[this.path].do_enter.length > 0) {
-                for(var i = 0; i < Path.routes[this.path].do_enter.length; i++){
-                    result = Path.routes[this.path].do_enter[i]();
-                    if(result === false){
+        if (Path.routes.defined[this.path].hasOwnProperty("do_enter")) {
+            if (Path.routes.defined[this.path].do_enter.length > 0) {
+                for (i = 0; i < Path.routes.defined[this.path].do_enter.length; i++) {
+                    result = Path.routes.defined[this.path].do_enter[i]();
+                    if (result === false) {
                         halt_execution = true;
                         break;
                     }
                 }
             }
         }
-        if(!halt_execution){
-            Path.routes[this.path].action();
+        if (!halt_execution) {
+            Path.routes.defined[this.path].action();
         }
     }
 };
