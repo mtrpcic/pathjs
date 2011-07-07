@@ -1,5 +1,5 @@
 var Path = {
-    'version': "0.6.4",
+    'version': "0.6.5",
     'map': function (path) {
         if (Path.routes.defined.hasOwnProperty(path)) {
             return Path.routes.defined[path];
@@ -24,7 +24,7 @@ var Path = {
                     compare = path;
                     if (slice.search(/:/) > 0) {
                         for (i = 0; i < slice.split("/").length; i++) {
-                            if ((i < compare.split("/").length) && (slice.split("/")[i][0] === ":")) {
+                            if ((i < compare.split("/").length) && (slice.split("/")[i].charAt(0) === ":")) {
                                 params[slice.split('/')[i].replace(/:/, '')] = compare.split("/")[i];
                                 compare = compare.replace(compare.split("/")[i], slice.split("/")[i]);
                             }
