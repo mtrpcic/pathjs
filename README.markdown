@@ -136,6 +136,7 @@ to your site with a predefined route.  Without knowing the DOM is completely don
 perform operations it won't yet have the ability to do.
 
 **HTML5 pushState**
+
 HTML5 pushState is officially supported as of version 0.7.  There are some changes with the way you work with PathJS when using the HTML5
 pushState API, most importantly:
 
