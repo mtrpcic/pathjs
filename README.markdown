@@ -164,7 +164,7 @@ To run the tests, simply navigate to the `./tests` folder and open the HTML file
 `file://` protocol, and to run the tests in the `tests/pushstate` folder, you will need to run them through a webserver such as nginx or Apache.
 
 # Next Steps #
-* Optimizations
+* Add examples
 * Adding support for "after" callbacks
 * Deprecating the "enter" callback in favour of "before"
 
