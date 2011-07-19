@@ -1,5 +1,5 @@
 var Path = {
-    'version': "0.6.5",
+    'version': "0.7",
     'map': function (path) {
         if (Path.routes.defined.hasOwnProperty(path)) {
             return Path.routes.defined[path];
@@ -12,6 +12,13 @@ var Path = {
     },
     'rescue': function (fn) {
         Path.routes.rescue = fn;
+    },
+    'history': {
+        'pushState': function(state, title, path){
+            if(Path.dispatch(path)){
+                history.pushState(state, title, path);
+            }
+        }
     },
     'match': function (path, parameterize) {
         var params = {}, route = null, possible_routes, slice, i, j, compare;
@@ -41,12 +48,12 @@ var Path = {
         }
         return null;
     },
-    'dispatch': function () {
+    'dispatch': function (passed_route) {
         var previous_route, matched_route;
-        if (Path.routes.current !== location.hash) {
+        if (Path.routes.current !== passed_route) {
             Path.routes.previous = Path.routes.current;
-            Path.routes.current = location.hash;
-            matched_route = Path.match(location.hash, true);
+            Path.routes.current = passed_route;
+            matched_route = Path.match(passed_route, true);
 
             if (Path.routes.previous) {
                 previous_route = Path.match(Path.routes.previous);
@@ -57,6 +64,7 @@ var Path = {
 
             if (matched_route !== null) {
                 matched_route.run();
+                return true;
             } else {
                 if (Path.routes.rescue !== null) {
                     Path.routes.rescue();
@@ -65,18 +73,19 @@ var Path = {
         }
     },
     'listen': function () {
+        var fn = function(){ Path.dispatch(location.hash); }
         if (location.hash === "") {
             if (Path.routes.root !== null) {
                 location.hash = Path.routes.root;
             }
         } else {
-            Path.dispatch();
+            Path.dispatch(location.hash);
         }
 
         if ("onhashchange" in window) {
-            window.onhashchange = Path.dispatch;
+            window.onhashchange = fn;
         } else {
-            setInterval(Path.dispatch, 50);
+            setInterval(fn, 50);
         }
     },
     'core': {

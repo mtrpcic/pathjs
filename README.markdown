@@ -1,15 +1,16 @@
 # PathJS #
 
-PathJS is a lightweight, client-side routing library that allows you to create "single page" applications.
+PathJS is a lightweight, client-side routing library that allows you to create "single page" applications using Hashbangs and/or HTML5 pushState.
 
 # Features #
 * Lightweight
+* Supports the HTML5 History API
 * Tested (tests available in the `./tests` directory)
 * Supports the `onhashchange` method
 * Supports paramaterized routes
 * Supports optional route components (dynamic routes)
 * Supports Aspect Oriented Programming
-* Compatible with all major browsers (Tested on Firefox 3.6, Firefox 4.0, Chrome 9, Opera 11, IE8)
+* Compatible with all major browsers (Tested on Firefox 3.6, Firefox 4.0, Firefox 5.0, Chrome 9, Opera 11, IE9, IE8, IE9)
 * Allows you to define root routes, and rescue methods
 * Independant of all third party libraries, but plays nice with all of them
 
@@ -134,9 +135,37 @@ You should *always* wrap your `Path.listen()` statements in some form of "Docume
 to your site with a predefined route.  Without knowing the DOM is completely done loading, that route will be executed, and may try to
 perform operations it won't yet have the ability to do.
 
+**HTML5 pushState**
+HTML5 pushState is officially supported as of version 0.7.  There are some changes with the way you work with PathJS when using the HTML5
+pushState API, most importantly:
+
+* There is no support for root routes or default routes, as these don't make sense when the URI contains no special characters.  Simply pass the full route around.
+* There is no need to call the Path.listen() method, as you are no longer waiting for events - you will be manually calling them.
+* To trigger an event, call the `Path.history.pushState` method, rather than the `history.pushState` method.
+
+You define the routes the same as usual:
+
+    Path.map("/html5/rocks").to(function(){
+        alert("Hello, World!");
+    });
+
+Then, in the click event for anything you'd like to trigger, simply call the following:
+
+    Path.history.pushState(state, title, path);
+
+The `Path.history.pushState` method is analogous to the standard `history.pushState` method, but wraps calls to the PathJS dispatcher.  Using this method, you will
+not need to modify the `window.onpopstate` method.  You can access the history state information the same as if you had manually set the state via `history.pushState`.
+
+Please keep in mind that the functionality provided by `Path.history.pushState` is only available in modern browsers that support the HTML5 History API.
+
+#Running Tests#
+To run the tests, simply navigate to the `./tests` folder and open the HTML file in your browser.  Please note that the HTML5 History API is not compatible with the
+`file://` protocol, and to run the tests in the `tests/pushstate` folder, you will need to run them through a webserver such as nginx or Apache.
+
 # Next Steps #
 * Optimizations
-* Adding support for HTML5 push/pop state
+* Adding support for "after" callbacks
+* Deprecating the "enter" callback in favour of "before"
 
 # Pull Requests #
 To make a pull request, please do the following:
