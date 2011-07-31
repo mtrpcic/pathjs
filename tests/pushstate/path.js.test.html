@@ -29,8 +29,12 @@
 		}
 		
 		function run_route(){
-		    if(index < hrefs.length){
-                            Path.history.pushState({}, "", hrefs[index]);
+		    if(index <= hrefs.length){
+                            if(index == hrefs.length){
+                                window.history.go(-1);
+                            } else {
+                                Path.history.pushState({}, "", hrefs[index]);
+                            }
 			    index++;
 			} else {
 			    clearInterval(timer);
@@ -121,6 +125,8 @@
 			Path.rescue(function(){
 			    update("RESCUE");
 			});
+
+                        Path.history.listen();
 			
 		    timer = setInterval(run_route, 500);
 	    }
@@ -169,11 +175,12 @@
 				<tr><td>H(one=N/A, two=N/A)</td>   <td>Optional parameters with only the require part submitted</td></tr>
 				<tr><td>H(one=10, two=N/A)</td>    <td>Optional parameters with one optional part submitted</td></tr>
 				<tr><td>H(one=10, two=20)</td>     <td>Optional parameters two levels deep</td></tr>
+                                <tr><td>H(one=10, two=N/A)</td>    <td>Testing the "back" functionality</td></tr>
 			</table>
 		</div><br /><br />
 		<div id="console">
 		    <h3>Expected</h3>
-		    <div id="expected">A[enter]::A[action]::A[exit]::B[enter]::B[action]::C[action]::C[exit]::RESCUE::RESCUE::E[enter](parse)::E[action](parse id=1)::E[enter](parse)::E[action](parse id=2)::E[action](check id=3)::E[exit](check)::F[enter]::F[action]::G[enter 1]::G[enter 2]::G[enter 3]::G[enter 4]::H(one=N/A, two=N/A)::H(one=10, two=N/A)::H(one=10, two=20)</div>
+		    <div id="expected">A[enter]::A[action]::A[exit]::B[enter]::B[action]::C[action]::C[exit]::RESCUE::RESCUE::E[enter](parse)::E[action](parse id=1)::E[enter](parse)::E[action](parse id=2)::E[action](check id=3)::E[exit](check)::F[enter]::F[action]::G[enter 1]::G[enter 2]::G[enter 3]::G[enter 4]::H(one=N/A, two=N/A)::H(one=10, two=N/A)::H(one=10, two=20)::H(one=10, two=N/A)</div>
 			<h3>Actual</h3>
 			<div id="actual"></div>
 			<h3>Grade</h3>

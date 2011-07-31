@@ -1,5 +1,5 @@
 var Path = {
-    'version': "0.7",
+    'version': "0.8",
     'map': function (path) {
         if (Path.routes.defined.hasOwnProperty(path)) {
             return Path.routes.defined[path];
@@ -15,8 +15,35 @@ var Path = {
     },
     'history': {
         'pushState': function(state, title, path){
-            if(Path.dispatch(path)){
-                history.pushState(state, title, path);
+            if(Path.history.supported){
+                if(Path.dispatch(path)){
+                    history.pushState(state, title, path);
+                }
+            } else {
+                if(Path.history.fallback){
+                    window.location.hash = "#" + path;
+                }
+            }
+        },
+        'popState': function(event){
+            Path.dispatch(document.location.pathname);
+        },
+        'listen': function(fallback){
+            Path.history.supported = !!(window.history && window.history.pushState);
+            Path.history.fallback  = fallback;
+
+            if(Path.history.supported){
+                window.onpopstate = Path.history.popState;
+            } else {
+                if(Path.history.fallback){
+                    for(route in Path.routes.defined){
+                        if(route.charAt(0) != "#"){
+                          Path.routes.defined["#"+route] = Path.routes.defined[route];
+                          Path.routes.defined["#"+route].path = "#"+route;
+                        }
+                    }
+                    Path.listen();
+                }
             }
         }
     },
@@ -74,6 +101,7 @@ var Path = {
     },
     'listen': function () {
         var fn = function(){ Path.dispatch(location.hash); }
+
         if (location.hash === "") {
             if (Path.routes.root !== null) {
                 location.hash = Path.routes.root;
