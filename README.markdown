@@ -5,10 +5,9 @@ PathJS is a lightweight, client-side routing library that allows you to create "
 # Features #
 * Lightweight
 * Supports the HTML5 History API, the 'onhashchange' method, and graceful degredation
+* Supports root routes, rescue methods, paramaterized routes, optional route components (dynamic routes), and Aspect Oriented Programming
 * Well Tested (tests available in the `./tests` directory)
-* Supports paramaterized routes, optional route components (dynamic routes), and Aspect Oriented Programming
 * Compatible with all major browsers (Tested on Firefox 3.6, Firefox 4.0, Firefox 5.0, Chrome 9, Opera 11, IE7, IE8, IE9)
-* Allows you to define root routes and rescue methods
 * Independant of all third party libraries, but plays nice with all of them
 
 # Using PathJS - A Brief Example #
@@ -35,6 +34,9 @@ PathJS is a lightweight, client-side routing library that allows you to create "
 
 # Documentation and Tips #
 Any of the examples above confuse you?  Read up on the details in the [wiki](https://github.com/mtrpcic/pathjs/wiki).
+
+# Examples #
+You can find examples on the official [Github Page](http://mtrpcic.github.com/pathjs).
 
 # Running Tests #
 To run the tests, simply navigate to the `./tests` folder and open the HTML file in your browser.  Please note that the HTML5 History API is not compatible with the
