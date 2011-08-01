@@ -45,7 +45,6 @@ To run the tests, simply navigate to the `./tests` folder and open the HTML file
 # Next Steps #
 * Adding support for "after" callbacks
 * Deprecating the "enter" callback in favour of "before"
-* Add examples
 
 # Pull Requests #
 To make a pull request, please do the following:
@@ -57,8 +56,7 @@ To make a pull request, please do the following:
 * Do **not** modify the `Path.version` attribute.  I will modify that manually when merging the request
 
 # Disclaimer #
-This code is still under development, and as such, minor revisions may break compatibility with earlier versions of
-the library.  Please keep this in mind when using PathJS.
+This code is provided with no warranty.  While I strive to maintain backwards compatibility, the code is still under active development.  As this is the case, some revisions may break break compatibility with earlier versions of the library.  Please keep this in mind when using PathJS.
 
 # Copyright and Licensing #
 Copyright (c) 2011 Mike Trpcic, released under the MIT license.
