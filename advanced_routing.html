@@ -1,0 +1,192 @@
+<html>
+  <head>
+    <title>Hashtag Example</title>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="https://raw.github.com/mtrpcic/pathjs/master/path.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.0/themes/base/jquery-ui.css"></style>
+    <style type="text/css">
+        body {
+            font-family: Verdana, Arial;
+            font-size: 14px;
+            background-color: #36393B;
+            margin: 0;
+            color: #EEE6AB;
+        }
+
+        #wrapper {
+            width: 650px;
+            height: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 50px;
+        }
+
+        .panel {
+            border: 2px solid #696758;
+            width: 300px;
+            height: 100%;
+            background-color: #45484B;
+        }
+
+        #actions{
+            float: left;
+        }
+
+        #output{
+            float: right;
+        }
+       
+        #output .content {
+            padding: 10px;
+        }
+
+        .panel h3 {
+          margin: 0;
+          border-bottom: 2px solid #696758;
+          height: 30px;
+          font-size: 18px;
+          text-align: center;
+          line-height: 30px;
+        }
+
+        .panel a {
+            display: block;
+            height: 30px;
+            line-height: 30px;
+            text-decoration: none;
+            padding-left: 15px;
+            font-weight: bold;
+            color: #DEDEDE;
+        }
+
+        .panel a:nth-child(even) {
+            background-color: #42453E;
+        }
+
+        .panel a:nth-child(odd){
+            background-color: #48514E;
+        }
+
+        .panel a:hover {
+            background-color: #35383B;
+        }
+
+        .error {
+            background-color: black;
+            color: red;
+        }
+
+        #notes {
+            width: 280px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 173px;
+            border: 1px dashed #C5BC8E;
+            padding: 5px;
+            height: 28px;
+            font-size: 12px;
+        }
+
+        #header {
+            width: 646;
+            height: 40px;
+            clear: both;
+            margin-bottom: 15px;
+            border: 2px solid #696758;
+            text-align: center;
+        }
+        #header h2 {
+            height: 100%;
+            margin-top: 0;
+            line-height: 40px;
+        }
+    </style>
+
+    <script type="text/javascript">
+        // This example makes use of the jQuery library.
+
+        // The examples in this document work with both the HTML5 History API and the Hashtag
+        // methods provided by PathJS.  For a wider range of compatibility, these examples
+        // use the Hashtag.
+
+        // If you have not yet read the "Hashtag Basics" and "HTML5 Basics" examples yet, I
+        // strongly urge you to do so now.
+
+
+        // This is our "rescue" method.
+        function notFound(){
+            $("#output .content").html("404 Not Found");
+        }
+
+        Path.map("#/users").to(function(){
+            $("#output .content").html("<a href='#/users/1'>Mike Trpcic</a><a href='#/users/2'>Garry Whitmore</a><a href='#/users/3'>SlayerS`Boxer`</a>");
+        });
+
+        // This is an example of a parameterized route. This route will match things such as
+        // "#/users/1", "#/users/500", and "#/users/mike".  Inside the action of that route,
+        // you have access to the parameters via the `this.params` object.
+        Path.map("#/users/:user_id").to(function(){
+            $("#output .content").html("You selected the user with ID: " + this.params["user_id"]);
+        });
+
+        // This is a route with optional components.  Optional components in a route are contained
+        // within brackets.  The route below will match both "#/about" and "#/about/author".
+        Path.map("#/about(/author)").to(function(){
+            $("#output .content").html("About & About/Author share a route!");
+        });
+
+        // This route is an example of execution halting and the filter chain.  You can assign 
+        // multiple "enter" methods to any given route.  You can assign them as an array, or by
+        // calling the `enter` method multiple times.  When executing the route, PathJS will go
+        // through your enter methods in the order they were assigned.  If at any point one of
+        // these methods explicitly returns false, execution is halted and the route is never 
+        // hit.  In the example below, we halt execution, and the actual action of the "#/contact"
+        // route is never invoked.
+        Path.map("#/contact").to(function(){
+            $("#output .content").html("Contact");
+        }).enter([
+            function(){
+                $("#output .content").html("This will work.");
+            },
+            function(){
+                $("#output .content").append("Execution Halted!");
+                return false;
+            }
+        ]);
+
+        Path.root("#/users");
+
+        Path.rescue(notFound);
+
+        $(document).ready(function(){
+            Path.listen();
+        });
+    </script>
+  </head>
+  <body>
+    <div id="wrapper">
+      <div id="header">
+        <h2>Advanced Routing</h2>
+      </div>
+      <div id="actions" class="panel">
+        <h3>Actions</h3>
+        <a href="#/users">Users (Route Parameters)</a>
+        <a href="#/about">About (Optional Parts)</a>
+        <a href="#/about/author">About Author (Optional Parts)</a>
+        <a href="#/contact">Contact (Execution Halting)</a>
+        <a href="#/unicorns">Unicorns!?</a>
+        <div id="notes">
+            View the source of this page to view comments about what's going on.
+        </div>
+      </div>
+    
+      <div id="output" class="panel">
+        <h3>Content</h3>
+        <div class="content">
+        </div>
+      </div>
+
+    </div>
+  </body>
+</html>

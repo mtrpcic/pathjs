@@ -1,0 +1,180 @@
+<html>
+  <head>
+    <title>Hashtag Example</title>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="https://raw.github.com/mtrpcic/pathjs/master/path.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.0/themes/base/jquery-ui.css"></style>
+    <style type="text/css">
+        body {
+            font-family: Verdana, Arial;
+            font-size: 14px;
+            background-color: #36393B;
+            margin: 0;
+            color: #EEE6AB;
+        }
+
+        #wrapper {
+            width: 650px;
+            height: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 50px;
+        }
+
+        .panel {
+            border: 2px solid #696758;
+            width: 300px;
+            height: 100%;
+            background-color: #45484B;
+        }
+
+        #actions{
+            float: left;
+        }
+
+        #output{
+            float: right;
+        }
+       
+        #output .content {
+            padding: 10px;
+        }
+
+        .panel h3 {
+          margin: 0;
+          border-bottom: 2px solid #696758;
+          height: 30px;
+          font-size: 18px;
+          text-align: center;
+          line-height: 30px;
+        }
+
+        #actions a {
+            display: block;
+            height: 30px;
+            line-height: 30px;
+            text-decoration: none;
+            padding-left: 15px;
+            font-weight: bold;
+            color: #DEDEDE;
+        }
+
+        #actions a:nth-child(even) {
+            background-color: #42453E;
+        }
+
+        #actions a:nth-child(odd){
+            background-color: #48514E;
+        }
+
+        #actions a:hover {
+            background-color: #35383B;
+        }
+
+        .error {
+            background-color: black;
+            color: red;
+        }
+
+        #notes {
+            width: 280px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 203px;
+            border: 1px dashed #C5BC8E;
+            padding: 5px;
+            height: 28px;
+            font-size: 12px;
+        }
+
+        #header {
+            width: 646;
+            height: 40px;
+            clear: both;
+            margin-bottom: 15px;
+            border: 2px solid #696758;
+            text-align: center;
+        }
+        #header h2 {
+            height: 100%;
+            margin-top: 0;
+            line-height: 40px;
+        }
+    </style>
+
+    <script type="text/javascript">
+        // This example makes use of the jQuery library.
+       
+        // You can use any methods as actions in PathJS.  You can define them as I do below,
+        // assign them to variables, or use anonymous functions.  The choice is yours.
+        function notFound(){
+            $("#output .content").html("404 Not Found");
+            $("#output .content").addClass("error");
+        }
+
+        function setPageBackground(){
+            $("#output .content").removeClass("error");
+        }        
+
+        // Here we define our routes.  You'll notice that I only define three routes, even
+        // though there are four links.  Each route has an action assigned to it (via the 
+        // `to` method, as well as an `enter` method.  The `enter` method is called before
+        // the route is performed, which allows you to do any setup you need (changes classes,
+        // performing AJAX calls, adding animations, etc.
+        Path.map("#/users").to(function(){
+            $("#output .content").html("Users");
+        }).enter(setPageBackground);
+
+       Path.map("#/about").to(function(){
+            $("#output .content").html("About");
+        }).enter(setPageBackground);
+
+       Path.map("#/contact").to(function(){
+            $("#output .content").html("Contact");
+        }).enter(setPageBackground);
+
+        // Here we set a "root route".  You may have noticed that when you landed on this
+        // page you were automatically "redirected" to the "#/users" route.  The definition
+        // below tells PathJS to load this route automatically if one isn't provided.
+        Path.root("#/users");
+
+        // The `Path.rescue()` method takes a function as an argument, and will be called when
+        // a route is activated that you have no yet defined an action for.  On this example
+        // page, you'll notice there is no defined route for the "Unicorns!?" link.  Since no
+        // route is defined, it calls this method instead.
+        Path.rescue(notFound);
+
+        $(document).ready(function(){
+            // This line is used to start the PathJS listener.  It's good practice to put this
+            // call inside some sort of "document ready" listener, in case the default route
+            // relies on DOM elements that may not yet be ready.
+            Path.listen();
+        });
+    </script>
+  </head>
+  <body>
+    <div id="wrapper">
+      <div id="header">
+        <h2>Hashtag Basics</h2>
+      </div>
+      <div id="actions" class="panel">
+        <h3>Actions</h3>
+        <a href="#/users">Users</a>
+        <a href="#/about">About</a>
+        <a href="#/contact">Contact</a>
+        <a href="#/unicorns">Unicorns!?</a>
+        <div id="notes">
+            View the source of this page to view comments about what's going on.
+        </div>
+      </div>
+    
+      <div id="output" class="panel">
+        <h3>Content</h3>
+        <div class="content">
+        </div>
+      </div>
+
+    </div>
+  </body>
+</html>
