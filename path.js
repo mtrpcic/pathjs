@@ -1,5 +1,5 @@
 var Path = {
-    'version': "0.8",
+    'version': "0.8.1",
     'map': function (path) {
         if (Path.routes.defined.hasOwnProperty(path)) {
             return Path.routes.defined[path];
@@ -106,14 +106,16 @@ var Path = {
             if (Path.routes.root !== null) {
                 location.hash = Path.routes.root;
             }
-        } else {
-            Path.dispatch(location.hash);
         }
 
         if ("onhashchange" in window) {
             window.onhashchange = fn;
         } else {
             setInterval(fn, 50);
+        }
+
+        if(location.hash !== "") {
+            Path.dispatch(location.hash);
         }
     },
     'core': {
