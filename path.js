@@ -1,5 +1,5 @@
 var Path = {
-    'version': "0.8.1",
+    'version': "0.8.2",
     'map': function (path) {
         if (Path.routes.defined.hasOwnProperty(path)) {
             return Path.routes.defined[path];
@@ -108,7 +108,9 @@ var Path = {
             }
         }
 
-        if ("onhashchange" in window) {
+        // The 'document.documentMode' checks below ensure that PathJS fires the right events
+        // even in IE "Quirks Mode".
+        if ("onhashchange" in window && (!document.documentMode || document.documentMode >= 8)) {
             window.onhashchange = fn;
         } else {
             setInterval(fn, 50);
