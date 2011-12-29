@@ -28,7 +28,7 @@ PathJS is a lightweight, client-side routing library that allows you to create "
         alert("Posts!");
     }).enter(clearPanel);
     
-    Path.root = "#/posts";
+    Path.root("#/posts");
     
     Path.listen();
 
