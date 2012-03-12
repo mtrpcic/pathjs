@@ -1,5 +1,5 @@
 var Path = {
-    'version': "0.8.2",
+    'version': "0.8.3",
     'map': function (path) {
         if (Path.routes.defined.hasOwnProperty(path)) {
             return Path.routes.defined[path];
@@ -14,6 +14,7 @@ var Path = {
         Path.routes.rescue = fn;
     },
     'history': {
+        'initial':{}, // Empty container for "Initial Popstate" checking variables.
         'pushState': function(state, title, path){
             if(Path.history.supported){
                 if(Path.dispatch(path)){
@@ -26,6 +27,9 @@ var Path = {
             }
         },
         'popState': function(event){
+            var initialPop = !Path.history.initial.popped && location.href == Path.history.initial.URL;
+            Path.history.initial.popped = true;
+            if(initialPop) return;
             Path.dispatch(document.location.pathname);
         },
         'listen': function(fallback){
@@ -33,6 +37,7 @@ var Path = {
             Path.history.fallback  = fallback;
 
             if(Path.history.supported){
+                Path.history.initial.popped = ('state' in window.history), Path.history.initial.URL = location.href;
                 window.onpopstate = Path.history.popState;
             } else {
                 if(Path.history.fallback){
