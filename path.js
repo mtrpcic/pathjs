@@ -128,7 +128,7 @@ var Path = {
     'core': {
         'route': function (path) {
             this.path = path;
-            this.action = null;
+            this.action = [];
             this.do_enter = [];
             this.do_exit = null;
             this.params = {};
@@ -144,8 +144,12 @@ var Path = {
     }
 };
 Path.core.route.prototype = {
-    'to': function (fn) {
-        this.action = fn;
+    'to': function (fns) {
+        if (fns instanceof Array) {
+            this.action = this.action.concat(fns);
+        } else {
+            this.action.push(fns);
+        }
         return this;
     },
     'enter': function (fns) {
@@ -186,7 +190,8 @@ Path.core.route.prototype = {
             }
         }
         if (!halt_execution) {
-            Path.routes.defined[this.path].action();
+            var actions = Path.routes.defined[this.path].action;
+            for (var i=0; i<actions.length; i++) actions[i].apply(this, null);
         }
     }
 };
