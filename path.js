@@ -65,7 +65,9 @@ var Path = {
                         for (i = 0; i < slice.split("/").length; i++) {
                             if ((i < compare.split("/").length) && (slice.split("/")[i].charAt(0) === ":")) {
                                 params[slice.split('/')[i].replace(/:/, '')] = compare.split("/")[i];
-                                compare = compare.replace(compare.split("/")[i], slice.split("/")[i]);
+                                var compare_array = compare.split("/");
+                                compare_array[i] = slice.split("/")[i];
+                                compare = compare_array.join("/");
                             }
                         }
                     }
