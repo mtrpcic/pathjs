@@ -177,7 +177,7 @@ Path.core.route.prototype = {
         if (Path.routes.defined[this.path].hasOwnProperty("do_enter")) {
             if (Path.routes.defined[this.path].do_enter.length > 0) {
                 for (i = 0; i < Path.routes.defined[this.path].do_enter.length; i++) {
-                    result = Path.routes.defined[this.path].do_enter[i].apply(this, null);
+                    result = Path.routes.defined[this.path].do_enter[i].apply(this);
                     if (result === false) {
                         halt_execution = true;
                         break;
