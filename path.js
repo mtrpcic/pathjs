@@ -60,12 +60,12 @@ var Path = {
                 possible_routes = route.partition();
 
                 // if a ? is present...
-                if (path.search(/\?/) > 0) {
-                    var url_params = path.match(/\?[a-z0-9\-_=&]+/i),
+                if (path.search(/\?[a-z0-9\-_=&]{1,}/i) > 0) {
+                    var url_params = path.match(/\?[a-z0-9\-_=&]{1,}/i),
                         param;
 
                     // remove the ?, split params on & if applicable
-                    param = url_params.substring(1).split('&');
+                    param = url_params[0].substring(1).split('&');
 
                     // add params to route params array, allowing fully qualified params (like :id in URL match)
                     //  to overwrite query string params
