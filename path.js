@@ -58,6 +58,25 @@ var Path = {
             if (route !== null && route !== undefined) {
                 route = Path.routes.defined[route];
                 possible_routes = route.partition();
+
+                // if a ? is present...
+                if (path.search(/\?/) > 0) {
+                    var url_params = path.match(/\?[a-z0-9\-_=&]+/i),
+                        param;
+
+                    // remove the ?, split params on & if applicable
+                    param = url_params.substring(1).split('&');
+
+                    // add params to route params array, allowing fully qualified params (like :id in URL match)
+                    //  to overwrite query string params
+                    for(var u in param) {
+                        params[ param[u].split('=')[0] || param[u] ] = param[u].split('=')[1] || true;
+                    }
+
+                    // remove url query params from path & re-assign
+                    path = path.substring(0, path.search(/\?[a-z0-9\-_=&]+/gi));
+                }
+
                 for (j = 0; j < possible_routes.length; j++) {
                     slice = possible_routes[j];
                     compare = path;
