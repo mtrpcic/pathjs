@@ -137,7 +137,7 @@
             // The 'document.documentMode' checks below ensure that PathJS fires the right events
             // even in IE "Quirks Mode".
             if ("onhashchange" in window && (!document.documentMode || document.documentMode >= 8)) {
-                window.onhashchange = fn;
+                window.addEventListener("hashchange", fn, false);
             } else {
                 setInterval(fn, 50);
             }
