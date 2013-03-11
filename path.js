@@ -30,7 +30,7 @@ var Path = {
             var initialPop = !Path.history.initial.popped && location.href == Path.history.initial.URL;
             Path.history.initial.popped = true;
             if(initialPop) return;
-            Path.dispatch(document.location.pathname);
+            Path.dispatch(Path.routes.root ? document.location.href : document.location.pathname);
         },
         'listen': function(fallback){
             Path.history.supported = !!(window.history && window.history.pushState);
@@ -82,6 +82,7 @@ var Path = {
     },
     'dispatch': function (passed_route) {
         var previous_route, matched_route;
+        passed_route = passed_route.replace(Path.routes.root,'');
         if (Path.routes.current !== passed_route) {
             Path.routes.previous = Path.routes.current;
             Path.routes.current = passed_route;
