@@ -59,6 +59,7 @@ var Path = {
                 route = Path.routes.defined[route];
                 possible_routes = route.partition();
                 for (j = 0; j < possible_routes.length; j++) {
+                    params = {};
                     slice = possible_routes[j];
                     compare = path;
                     if (slice.search(/:/) > 0) {
