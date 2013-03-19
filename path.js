@@ -59,13 +59,16 @@ var Path = {
                 route = Path.routes.defined[route];
                 possible_routes = route.partition();
                 for (j = 0; j < possible_routes.length; j++) {
+                    params = {};
                     slice = possible_routes[j];
                     compare = path;
                     if (slice.search(/:/) > 0) {
                         for (i = 0; i < slice.split("/").length; i++) {
                             if ((i < compare.split("/").length) && (slice.split("/")[i].charAt(0) === ":")) {
                                 params[slice.split('/')[i].replace(/:/, '')] = compare.split("/")[i];
-                                compare = compare.replace(compare.split("/")[i], slice.split("/")[i]);
+                                compare = compare.split('/');
+                                compare[i] = slice.split('/')[i];
+                                compare = compare.join('/');
                             }
                         }
                     }
