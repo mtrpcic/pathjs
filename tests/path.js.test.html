@@ -34,8 +34,7 @@
 				update("C[exit]");
 			});
 			
-			// No map for #D1 or #D2.  This checks that our rescue method works, and works multiple times in succession.
-			
+			// No map for #D1 or #D2.  This checks that our rescue method works, and works multiple times in succession.			
 			Path.map("#E/params/:id/parse").to(function(){
 				update("E[action](parse id=" + this.params['id'] + ")");
 			});
