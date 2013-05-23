@@ -11,13 +11,22 @@ module.exports = function(grunt) {
     },
 
     webdriver: {
-      dev: {
+      pathjs: {
         options: {
           logLevel: 'silent',
           browser: 'firefox',
           binary: null
         },
         url: 'http://localhost:9001/tests/path.js.test.html',
+        tests: ['./tests/spec/pathjsSpec.js']
+      },
+      pathjs_min: {
+        options: {
+          logLevel: 'silent',
+          browser: 'firefox',
+          binary: null
+        },
+        url: 'http://localhost:9001/tests/path.min.js.test.html',
         tests: ['./tests/spec/pathjsSpec.js']
       }
     },
