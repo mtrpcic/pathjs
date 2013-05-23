@@ -41,7 +41,7 @@ var Path = {
                 window.onpopstate = Path.history.popState;
             } else {
                 if(Path.history.fallback){
-                    for(route in Path.routes.defined){
+                    for( var route in Path.routes.defined){
                         if(route.charAt(0) != "#"){
                           Path.routes.defined["#"+route] = Path.routes.defined[route];
                           Path.routes.defined["#"+route].path = "#"+route;
@@ -105,7 +105,7 @@ var Path = {
         }
     },
     'listen': function () {
-        var fn = function(){ Path.dispatch(location.hash); }
+        var fn = function(){ Path.dispatch(location.hash); };
 
         if (location.hash === "") {
             if (Path.routes.root !== null) {
@@ -162,7 +162,7 @@ Path.core.route.prototype = {
     },
     'partition': function () {
         var parts = [], options = [], re = /\(([^}]+?)\)/g, text, i;
-        while (text = re.exec(this.path)) {
+        while( !!(text = re.exec(this.path)) ) {
             parts.push(text[1]);
         }
         options.push(this.path.split("(")[0]);
