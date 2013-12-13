@@ -86,6 +86,7 @@ var Path = {
             Path.routes.previous = Path.routes.current;
             Path.routes.current = passed_route;
             matched_route = Path.match(passed_route, true);
+			Path.routes.currentparams = matched_route.params;
 
             if (Path.routes.previous) {
                 previous_route = Path.match(Path.routes.previous);
