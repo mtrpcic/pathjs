@@ -1,0 +1,11 @@
+{
+  "name": "mtrpcic/pathjs",
+  "version": "0.8.4",
+  "main": "path/to/main.css",
+  "description": "PathJS is a lightweight, client-side routing library that allows you to create "single page" applications using Hashbangs and/or HTML5 pushState.",
+  "license": "MIT",
+  "ignore": [
+    ".jshintrc",
+    "**/*.txt"
+  ]
+}
