@@ -53,7 +53,7 @@ var Path = {
         }
     },
     'match': function (path, parameterize) {
-        var params = {}, route = null, possible_routes, slice, i, j, compare;
+        var params = {}, route = null, possible_routes, slice, i, j, compare, compare_parts;
         for (route in Path.routes.defined) {
             if (route !== null && route !== undefined) {
                 route = Path.routes.defined[route];
@@ -63,9 +63,11 @@ var Path = {
                     compare = path;
                     if (slice.search(/:/) > 0) {
                         for (i = 0; i < slice.split("/").length; i++) {
-                            if ((i < compare.split("/").length) && (slice.split("/")[i].charAt(0) === ":")) {
-                                params[slice.split('/')[i].replace(/:/, '')] = compare.split("/")[i];
-                                compare = compare.replace(compare.split("/")[i], slice.split("/")[i]);
+                            compare_parts = compare.split("/");
+                            if ((i < compare_parts.length) && (slice.split("/")[i].charAt(0) === ":")) {
+                                params[slice.split('/')[i].replace(/:/, '')] = compare_parts[i];
+                                compare_parts[i] = slice.split("/")[i];
+                                compare = compare_parts.join("/");
                             }
                         }
                     }
