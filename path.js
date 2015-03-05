@@ -98,7 +98,7 @@ var Path = {
                 }
             }
 
-            if (matched_route !== null) {
+            if (matched_route !== null && (matched_route.path.indexOf(Path.routes.before.path) == -1 || Path.routes.before.fn() === undefined || Path.routes.before.fn())) {
                 matched_route.run();
                 return true;
             } else {
@@ -115,6 +115,10 @@ var Path = {
             if (Path.routes.root !== null) {
                 location.hash = Path.routes.root;
             }
+        }
+  
+        if (!Path.routes.before.fn) {
+            Path.routes.before.fn = function() { return true; }
         }
 
         // The 'document.documentMode' checks below ensure that PathJS fires the right events
