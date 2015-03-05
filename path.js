@@ -13,6 +13,10 @@ var Path = {
     'rescue': function (fn) {
         Path.routes.rescue = fn;
     },
+    'before': function (path, fn) {
+        Path.routes.before.path = path;
+        Path.routes.before.fn = fn;
+    },
     'history': {
         'initial':{}, // Empty container for "Initial Popstate" checking variables.
         'pushState': function(state, title, path){
@@ -140,7 +144,8 @@ var Path = {
         'root': null,
         'rescue': null,
         'previous': null,
-        'defined': {}
+        'defined': {},
+        'before': {}
     }
 };
 Path.core.route.prototype = {
