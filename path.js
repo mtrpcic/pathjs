@@ -56,9 +56,12 @@ var Path = {
             }
         }
     },
-    'beforeMatch': function () {
-       var result = Path.routes.before.fn();
-       return result === undefined || result;
+    'beforeMatch': function (matched_route) {
+       if (matched_route.path.indexOf(Path.routes.before.path) != -1) {
+          var result = Path.routes.before.fn();
+          return result === undefined || result;
+       }
+       return true;
     },
     'match': function (path, parameterize) {
         var params = {}, route = null, possible_routes, slice, i, j, compare;
@@ -102,7 +105,7 @@ var Path = {
                 }
             }
 
-            if (matched_route !== null && (matched_route.path.indexOf(Path.routes.before.path) == -1 || Path.beforeMatch())) {
+            if (matched_route !== null && Path.beforeMatch(matched_route)) {
                 matched_route.run();
                 return true;
             } else {
