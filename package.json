@@ -8,7 +8,7 @@
     "pushState",
     "routing"
   ],
-  "version": "0.8.1",
+  "version": "0.8.5",
   "homepage": "https://github.com/mtrpcic/pathjs",
   "author": {
     "name": "Mike Trpcic",
@@ -16,7 +16,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/mtrpcic/pathjs.git"
+    "url": "git://github.com/tom-smalls/pathjs.git"
   },
   "main": "./path.js",
   "dependencies": {},
@@ -29,15 +29,15 @@
   "_npmVersion": "1.0.6",
   "_nodeVersion": "v0.4.4",
   "_defaultsLoaded": true,
-  "dist": {
-    "shasum": "bfc27d3378ec2f5a9062150d31d72a8fc343a170",
-    "tarball": "http://registry.npmjs.org/pathjs/-/pathjs-0.8.1.tgz"
-  },
   "scripts": {},
   "maintainers": [
     {
       "name": "mbarkhau",
       "email": "mbarkhau@gmail.com"
+    },
+    {
+      "name": "tom",
+      "email": "tommckee@gmail.com"
     }
   ],
   "directories": {},

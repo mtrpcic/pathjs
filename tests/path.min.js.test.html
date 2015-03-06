@@ -1,8 +1,9 @@
 <!DOCTYPE HTML>
 <html>
 	<head>
-		<title>PathJS Test</title>
-		<script type="text/javascript" src="../path.js"></script>
+		<title>pathjsJS Test</title>
+		<script type="text/javascript" src="../path.js">
+                </script>
 		<script type="text/javascript">
 		var hrefs = [
 		        "#A",
@@ -54,7 +55,7 @@
 		}
 		
 		function define_routes(){
-		    Path.map("#A").enter(function(){
+		    pathjs.map("#A").enter(function(){
 			    update("A[enter]");
 			}).to(function(){
 			    update("A[action]");
@@ -62,15 +63,15 @@
 			    update("A[exit]");
 			});
 			
-			Path.map("#B").to(function(){
+			pathjs.map("#B").to(function(){
 			    update("B[action]");
 			});
 			
-			Path.map("#B").enter(function(){
+			pathjs.map("#B").enter(function(){
 			    update("B[enter]");
 			})
 			
-			Path.map("#C").to(function(){
+			pathjs.map("#C").to(function(){
 			    update("C[action]");
 			}).exit(function(){
 			    update("C[exit]");
@@ -78,29 +79,29 @@
 			
 			// No map for #D1 or #D2.  This checks that our rescue method works, and works multiple times in succession.
 			
-			Path.map("#E/params/:id/parse").to(function(){
+			pathjs.map("#E/params/:id/parse").to(function(){
 			    update("E[action](parse id=" + this.params['id'] + ")");
 			});
 			
-			Path.map("#E/params/:id/parse").enter(function(){
+			pathjs.map("#E/params/:id/parse").enter(function(){
 			    update("E[enter](parse id=" + this.params['id'] + ")");
 			});
 			
-			Path.map("#E/params/:id/check").to(function(){
+			pathjs.map("#E/params/:id/check").to(function(){
 			    update("E[action](check id=" + this.params['id'] + ")");
 			});
 			
-			Path.map("#E/params/:id/check").exit(function(){
+			pathjs.map("#E/params/:id/check").exit(function(){
 			    update("E[exit](check id=" + this.params['id'] + ")");
 			});
 			
-			Path.map("#F").enter(function(){
+			pathjs.map("#F").enter(function(){
 			    update("F[enter]");
 			}).to(function(){
 			    update("F[action]");
 			});
 			
-			Path.map("#G").enter(function(){
+			pathjs.map("#G").enter(function(){
 			    update("G[enter 1]");
 			}).enter(function(){
 			    update("G[enter 2]");
@@ -116,27 +117,27 @@
 			    update("G[action - NOT HIT]");
 			});
 
-                        Path.map("#H(/:id_one)(/:id_two)").to(function(){
+                        pathjs.map("#H(/:id_one)(/:id_two)").to(function(){
 	                    var id_one = this.params["id_one"] || "N/A";
 	                    var id_two = this.params["id_two"] || "N/A";
                             update("H(one=" + id_one + ", two=" + id_two + ")");
                         });
 			
-			Path.rescue(function(){
+			pathjs.rescue(function(){
 			    update("RESCUE");
 			});
 
-                        Path.before("/secure/", function() {
+                        pathjs.before("/secure/", function() {
                             update("I[enter before]");
                             return false;
                         });
 
-                        Path.map("#/secure/I").to(function(){
+                        pathjs.map("#/secure/I").to(function(){
                            update("I[before - not hit]");
                         });
 			
-			Path.root("#F");
-			Path.listen();
+			pathjs.root("#F");
+			pathjs.listen();
 		    timer = setInterval(run_route, 500);
 	    }
 		</script>
@@ -151,11 +152,11 @@
 	    <div id="description">
 		    <h2>Test Suite</h2>
 			<p>
-			    Path.js uses a very straightforward method of testing.  We manually construct
+			    pathjs.js uses a very straightforward method of testing.  We manually construct
 				a series of method calls that the library should execute under normal working
 				conditions.  We then use JavaScript to simulate the URL changes, and compare
 				the final result with what the result should actually be.  If the end result
-				is anything but perfect, the test is a failure, and this version of Path.JS
+				is anything but perfect, the test is a failure, and this version of pathjs.JS
 				is not suitable for use. The expected test results are as follows:
 			</p>
 			<table>
