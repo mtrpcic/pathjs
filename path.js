@@ -56,6 +56,10 @@ var Path = {
             }
         }
     },
+    'beforeMatch': function () {
+       var result = Path.routes.before.fn();
+       return result === undefined || result;
+    },
     'match': function (path, parameterize) {
         var params = {}, route = null, possible_routes, slice, i, j, compare;
         for (route in Path.routes.defined) {
@@ -98,7 +102,7 @@ var Path = {
                 }
             }
 
-            if (matched_route !== null && (matched_route.path.indexOf(Path.routes.before.path) == -1 || Path.routes.before.fn() === undefined || Path.routes.before.fn())) {
+            if (matched_route !== null && (matched_route.path.indexOf(Path.routes.before.path) == -1 || Path.beforeMatch())) {
                 matched_route.run();
                 return true;
             } else {
