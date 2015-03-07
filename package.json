@@ -1,0 +1,47 @@
+{
+  "name": "pathjs",
+  "description": "Routing library for 'single page' applications",
+  "keywords": [
+    "ender",
+    "path",
+    "hash",
+    "pushState",
+    "routing"
+  ],
+  "version": "0.8.5",
+  "homepage": "https://github.com/mtrpcic/pathjs",
+  "author": {
+    "name": "Mike Trpcic",
+    "url": "http://mtrpcic.net/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/tom-smalls/pathjs.git"
+  },
+  "main": "./path.js",
+  "dependencies": {},
+  "devDependencies": {},
+  "_id": "pathjs@0.8.1",
+  "engines": {
+    "node": "*"
+  },
+  "_engineSupported": true,
+  "_npmVersion": "1.0.6",
+  "_nodeVersion": "v0.4.4",
+  "_defaultsLoaded": true,
+  "scripts": {},
+  "maintainers": [
+    {
+      "name": "mbarkhau",
+      "email": "mbarkhau@gmail.com"
+    },
+    {
+      "name": "tom",
+      "email": "tommckee@gmail.com"
+    }
+  ],
+  "directories": {},
+  "_shasum": "bfc27d3378ec2f5a9062150d31d72a8fc343a170",
+  "_from": "pathjs@0.8.1",
+  "_resolved": "https://registry.npmjs.org/pathjs/-/pathjs-0.8.1.tgz"
+}
