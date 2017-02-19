@@ -1,7 +1,7 @@
 {
   "name": "ibn-battuta",
   "description": "Bower friendly routing libraray forked from PathJS",
-  "main": "ibn-battuta.min.js",
+  "main": "dist/ibn-battuta.min.js",
   "authors": [
     "Fahim Farook"
   ],
