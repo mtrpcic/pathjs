@@ -1,4 +1,4 @@
-# Forken from PathJS #
+# Forked from PathJS #
 
 PathJS is a lightweight, client-side routing library that allows you to create "single page" applications using Hashbangs and/or HTML5 pushState. 
 
