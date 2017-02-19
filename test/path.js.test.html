@@ -1,0 +1,191 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>PathJS Test</title>
+		<script type="text/javascript" src="../path.js"></script>
+		<script type="text/javascript">
+		var hrefs = [
+		        "#A",
+			"#B",
+			"#C",
+			"#D1",
+                        "#D2",
+			"#E/params/1/parse",
+			"#E/params/2/parse",
+			"#E/params/3/check",
+			"#F",
+			"#G",
+                        "#H",
+                        "#H/10",
+                        "#H/10/20"
+	    ];
+		var index = 0;
+		var timer = null;
+		
+		function update(str){
+		    var d = document.getElementById("actual");
+			text = d.innerHTML;
+			d.innerHTML = d.innerHTML + ((text == "") ? "" : "::") + str;
+		}
+		
+		function run_route(){
+		    if(index <= hrefs.length){
+                        if(index == hrefs.length){
+                            window.history.go(-1);
+                        } else {
+                            location.hash = hrefs[index];
+                        }
+			    index++;
+			} else {
+			    clearInterval(timer);
+				
+				var expected = document.getElementById("expected");
+				var actual = document.getElementById("actual");
+				var grade = document.getElementById("grade");
+				if(expected.innerHTML == actual.innerHTML){
+				    grade.innerHTML = "PASS";
+					grade.style.color = "#00FF00";
+				} else {
+				    grade.innerHTML = "FAIL";
+					grade.style.color = "#FF0000";
+				}
+			}
+		}
+		
+		function define_routes(){
+		    Path.map("#A").enter(function(){
+			    update("A[enter]");
+			}).to(function(){
+			    update("A[action]");
+			}).exit(function(){
+			    update("A[exit]");
+			});
+			
+			Path.map("#B").to(function(){
+			    update("B[action]");
+			});
+			
+			Path.map("#B").enter(function(){
+			    update("B[enter]");
+			})
+			
+			Path.map("#C").to(function(){
+			    update("C[action]");
+			}).exit(function(){
+			    update("C[exit]");
+			});
+			
+			// No map for #D1 or #D2.  This checks that our rescue method works, and works multiple times in succession.
+			
+			Path.map("#E/params/:id/parse").to(function(){
+			    update("E[action](parse id=" + this.params['id'] + ")");
+			});
+			
+			Path.map("#E/params/:id/parse").enter(function(){
+			    update("E[enter](parse id=" + this.params['id'] + ")");
+			});
+			
+			Path.map("#E/params/:id/check").to(function(){
+			    update("E[action](check id=" + this.params['id'] + ")");
+			});
+			
+			Path.map("#E/params/:id/check").exit(function(){
+			    update("E[exit](check id=" + this.params['id'] + ")");
+			});
+			
+			Path.map("#F").enter(function(){
+			    update("F[enter]");
+			}).to(function(){
+			    update("F[action]");
+			});
+			
+			Path.map("#G").enter(function(){
+			    update("G[enter 1]");
+			}).enter(function(){
+			    update("G[enter 2]");
+			}).enter([
+			    function(){
+			        update("G[enter 3]");
+			    },
+			    function(){
+			        update("G[enter 4]");
+			        return false;
+			    }
+			]).to(function(){
+			    update("G[action - NOT HIT]");
+			});
+
+                        Path.map("#H(/:id_one)(/:id_two)").to(function(){
+	                    var id_one = this.params["id_one"] || "N/A";
+	                    var id_two = this.params["id_two"] || "N/A";
+                            update("H(one=" + id_one + ", two=" + id_two + ")");
+                        });
+			
+			Path.rescue(function(){
+			    update("RESCUE");
+			});
+			
+			Path.root("#F");
+			Path.listen();
+		    timer = setInterval(run_route, 500);
+	    }
+		</script>
+		
+		<style type="text/css">
+		    body {font-family: arial;}
+		    p {width: 600px; text-align: justify;}
+		    table {font-family: courier;}
+		</style>
+	</head>
+	<body onload="define_routes();">
+	    <div id="description">
+		    <h2>Test Suite</h2>
+			<p>
+			    Path.js uses a very straightforward method of testing.  We manually construct
+				a series of method calls that the library should execute under normal working
+				conditions.  We then use JavaScript to simulate the URL changes, and compare
+				the final result with what the result should actually be.  If the end result
+				is anything but perfect, the test is a failure, and this version of Path.JS
+				is not suitable for use. The expected test results are as follows:
+			</p>
+			<table>
+			    <tr><td><b>Token</b></td>          <td><b>Reason</b></td></tr>
+				<tr><td>F[enter]</td>              <td>Enter method of F, as it is root</td></tr>
+				<tr><td>F[action]</td>             <td>True action of F, as it is root</td></tr>
+				<tr><td>A[enter]</td>              <td>Enter method of A, as it is looped</td></tr>
+				<tr><td>A[action]</td>             <td>True action of A, as it is looped</td></tr>
+				<tr><td>A[exit]</td>               <td>Exit method of A, as we move to next route</td></tr>
+				<tr><td>B[enter]</td>              <td>Enter method of B, as it is looped</td></tr>
+				<tr><td>B[action]</td>             <td>True action of B, as it is looped</td></tr>
+				<tr><td>C[action]</td>             <td>True action of C</td></tr>
+				<tr><td>C[exit]</td>               <td>Exit method of C, as we move to next route</td></tr>
+				<tr><td>RESCUE</td>                <td>Rescue a route that wasn't found (D1)</td></tr>
+				<tr><td>RESCUE</td>                <td>Rescue a route that wasn't found (D2)</td></tr>
+				<tr><td>E[enter](parse id=1)</td>  <td>Enter method of a param parsed route</td></tr>
+				<tr><td>E[action](parse id=1)</td> <td>True action of the route, with param of id=1</td></tr>
+				<tr><td>E[enter](parse id=2)</td>  <td>Enter method of the same route again</td></tr>
+				<tr><td>E[action](parse id=2)</td> <td>True action of the route, with param of id=2</td></tr>
+				<tr><td>E[action](check id=3)</td> <td>True action of the next route, with param id=3</td></tr>
+				<tr><td>E[exit](check id=3)</td>   <td>Exit method of parameterized route</td></tr>
+				<tr><td>F[enter]</td>              <td>Enter method of F again, our final route</td></tr>
+				<tr><td>F[action]</td>             <td>True action of F, our final route</td></tr>
+				<tr><td>G[enter 1]</td>            <td>First enter method of G</td></tr>
+				<tr><td>G[enter 2]</td>            <td>Second enter method of G</td></tr>
+				<tr><td>G[enter 3]</td>            <td>Third enter method of G</td></tr>
+				<tr><td>G[enter 4]</td>            <td>Last enter method of G - Returns false, stops execution</td></tr>
+				<tr><td>H(one=N/A, two=N/A)</td>   <td>Optional parameters with only the require part submitted</td></tr>
+				<tr><td>H(one=10, two=N/A)</td>    <td>Optional parameters with one optional part submitted</td></tr>
+				<tr><td>H(one=10, two=20)</td>     <td>Optional parameters two levels deep</td></tr>
+                                <tr><td>H(one=10, two=N/A)</td>    <td>Testing "back" functionality</td></tr>
+			</table>
+		</div><br /><br />
+		<div id="console">
+		    <h3>Expected</h3>
+		    <div id="expected">F[enter]::F[action]::A[enter]::A[action]::A[exit]::B[enter]::B[action]::C[action]::C[exit]::RESCUE::RESCUE::E[enter](parse id=1)::E[action](parse id=1)::E[enter](parse id=2)::E[action](parse id=2)::E[action](check id=3)::E[exit](check id=3)::F[enter]::F[action]::G[enter 1]::G[enter 2]::G[enter 3]::G[enter 4]::H(one=N/A, two=N/A)::H(one=10, two=N/A)::H(one=10, two=20)::H(one=10, two=N/A)</div>
+			<h3>Actual</h3>
+			<div id="actual"></div>
+			<h3>Grade</h3>
+			<div id="grade"></div>
+		</div>
+	</body>
+</html>
