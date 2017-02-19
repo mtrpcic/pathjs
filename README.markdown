@@ -1,6 +1,8 @@
-# PathJS #
+# Forken from PathJS #
 
-PathJS is a lightweight, client-side routing library that allows you to create "single page" applications using Hashbangs and/or HTML5 pushState.
+PathJS is a lightweight, client-side routing library that allows you to create "single page" applications using Hashbangs and/or HTML5 pushState. 
+
+Even though PathJS available on bower, it does not have proper bower.json with main:{} section. Also the bower.json files are missing on git repository. Ibn-Battuta is the restructured version of Path JS with proper bower configurations.
 
 # Features #
 * Lightweight
