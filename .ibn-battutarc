@@ -1,0 +1,16 @@
+{
+   "src": "src",
+   "test": "test",
+   "dist": "dist",
+   "temp": ".tmp",
+   "browserSync": {
+      "testPort": 9998,
+      "testHost": "localhost"
+   },
+   "optimize": {
+      "js": {
+         "concat": true,
+         "minify": true
+      }
+   }
+}

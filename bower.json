@@ -1,0 +1,24 @@
+{
+  "name": "ibn-battuta",
+  "description": "Bower friendly routing libraray forked from PathJS",
+  "main": "dist/ibn-battuta.min.js",
+  "authors": [
+    "Fahim Farook"
+  ],
+  "license": "ISC",
+  "keywords": [
+    "router",
+    "pathjs"
+  ],
+  "moduleType": [
+    "globals"
+  ],
+  "homepage": "https://github.com/fahimfarookme/ibn-battuta#readme",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
