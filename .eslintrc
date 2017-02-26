@@ -1,0 +1,17 @@
+{
+   "extends": [
+      "eslint:recommended"
+   ],
+   "env": {
+      "node": true,
+      "browser": true,
+      "es6": true,
+      "jquery": true,
+      "mocha": true,
+      "amd": true
+   },
+   "rules": {
+      "quotes": [2, "double"],
+      "indent": [2, 3]
+   }
+}
